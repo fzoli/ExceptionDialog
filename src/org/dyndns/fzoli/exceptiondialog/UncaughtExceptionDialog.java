@@ -11,10 +11,17 @@ import org.dyndns.fzoli.exceptiondialog.event.UncaughtExceptionEvent;
 import org.dyndns.fzoli.exceptiondialog.event.UncaughtExceptionListener;
 import org.dyndns.fzoli.exceptiondialog.event.UncaughtExceptionSource;
 
+/**
+ * Exception megjelenítő dialógusablak.
+ * @author zoli
+ */
 public final class UncaughtExceptionDialog extends JDialog {
     
     private JPanel pc = new JPanel(new GridLayout());
     
+    /**
+     * A dialógusablakot nem lehet kívülről példányosítani.
+     */
     private UncaughtExceptionDialog(Dialog.ModalityType modalityType, String s, UncaughtExceptionParameters params) {
         setResizable(false);
         setTitle(params.getTitle());
@@ -184,18 +191,44 @@ public final class UncaughtExceptionDialog extends JDialog {
         }
     }
     
+    /**
+     * A virtuális gép kivételkezelő metódusát cseréli le, és a konzol helyett dialógusablakban jelenik meg a kivétel.
+     * A dialógus ablak modális, ezért addig nem fut tovább a kód, míg az ablakot be nem zárják.
+     * Ha a grafikus felület nem elérhető, akkor az eredeti kivételkezelés marad meg.
+     * A dialógus ablak alapértelmezett beállításai kerülnek alkalmazásra.
+     */
     public static void applyHandler() {
         applyHandler(null);
     }
     
+    /**
+     * A virtuális gép kivételkezelő metódusát cseréli le, és a konzol helyett dialógusablakban jelenik meg a kivétel.
+     * A dialógus ablak modális, ezért addig nem fut tovább a kód, míg az ablakot be nem zárják.
+     * Ha a grafikus felület nem elérhető, akkor az eredeti kivételkezelés marad meg.
+     * @param params a dialógus ablak paraméterei, amik a megjelenést határozzák meg
+     */
     public static void applyHandler(UncaughtExceptionParameters params) {
         applyHandler(params, null);
     }
     
+    /**
+     * A virtuális gép kivételkezelő metódusát cseréli le, és a konzol helyett dialógusablakban jelenik meg a kivétel.
+     * A dialógus ablak modális, ezért addig nem fut tovább a kód, míg az ablakot be nem zárják.
+     * Ha a grafikus felület nem elérhető, akkor az eredeti kivételkezelés marad meg.
+     * @param params a dialógus ablak paraméterei, amik a megjelenést határozzák meg
+     * @param listener eseménykezelő, ami akkor hívódik meg, ha nem kezelt kivétel keletkezik
+     */
     public static void applyHandler(UncaughtExceptionParameters params, UncaughtExceptionListener listener) {
         applyHandler(Dialog.ModalityType.APPLICATION_MODAL, params, listener);
     }
     
+    /**
+     * A virtuális gép kivételkezelő metódusát cseréli le, és a konzol helyett dialógusablakban jelenik meg a kivétel.
+     * Ha a grafikus felület nem elérhető, akkor az eredeti kivételkezelés marad meg.
+     * @param modalityType a dialógus ablak modalitását szabályozza
+     * @param params a dialógus ablak paraméterei, amik a megjelenést határozzák meg
+     * @param listener eseménykezelő, ami akkor hívódik meg, ha nem kezelt kivétel keletkezik
+     */
     public static void applyHandler(final Dialog.ModalityType modalityType, UncaughtExceptionParameters params, UncaughtExceptionListener listener) {
         if (!GraphicsEnvironment.isHeadless()) {
             final UncaughtExceptionParameters uefp = params == null ? new UncaughtExceptionParameters() : params;

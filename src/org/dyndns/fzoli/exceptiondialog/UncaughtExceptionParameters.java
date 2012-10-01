@@ -5,7 +5,7 @@ import java.awt.Image;
 import java.awt.event.MouseAdapter;
 
 /**
- *
+ * A kivételmegjelenítő dialógusablak kinézetét és működését meghatározó osztály.
  * @author zoli
  */
 public final class UncaughtExceptionParameters {
